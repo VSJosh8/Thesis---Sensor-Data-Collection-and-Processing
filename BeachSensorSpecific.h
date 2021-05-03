@@ -469,7 +469,7 @@ public:
 		cout << "Select Data to Plot" << endl;
 		cout << "Temperature = 1" << endl;
 		cout << "Turbidity = 2" << endl;
-		cout << "Teansducer Depth = 3" << endl;
+		cout << "Transducer Depth = 3" << endl;
 		cout << "Wave Height = 4" << endl;
 		cout << "Wave Period = 5" << endl;
 		cout << "Battery Life = 6" << endl;
@@ -501,7 +501,6 @@ public:
 	string setLabel(int data_plot)
 	{
 		string label_string;
-		string title_string = "set title \"Berkeley Lab Temperature Plot\"\n";
 		string xlabel_string = "set xlabel \"Date and Time\"\n";
 		string ylabel_string = "set ylabel ";
 		string ylabel_data[6] = {"\"Temperature\"\n","\"Turbidity\"\n","\"Transducer Depth\"\n","\"Wave Height\"\n","\"Wave Period\"\n","\"Battery Life\"\n"};
@@ -509,22 +508,22 @@ public:
 		switch(data_plot)
 		{
 			case 3:
-				label_string = title_string + xlabel_string + ylabel_string + ylabel_data[0];
+				label_string =  "set title \"Chicago Beach Temperature Plot\" font \"Arial-bold,11\" \n" + xlabel_string + ylabel_string + ylabel_data[0];
 				break;
 			case 4:
-				label_string = title_string + xlabel_string + ylabel_string + ylabel_data[1];
+				label_string =  "set title \"Chicago Beach Turbidity Plot\" font \"Arial-bold,11\" \n" + xlabel_string + ylabel_string + ylabel_data[1];
 				break;
 			case 5:
-				label_string = title_string + xlabel_string + ylabel_string + ylabel_data[2];
+				label_string =  "set title \"Chicago Beach Transducer Depth Plot\" font \"Arial-bold,11\" \n" + xlabel_string + ylabel_string + ylabel_data[2];
 				break;
 			case 6:
-				label_string = title_string + xlabel_string + ylabel_string + ylabel_data[3];
+				label_string =  "set title \"Chicago Beach Wave Height Plot\" font \"Arial-bold,11\" \n" + xlabel_string + ylabel_string + ylabel_data[3];
 				break;
 			case 7:
-				label_string = title_string + xlabel_string + ylabel_string + ylabel_data[4];
+				label_string =  "set title \"Chicago Beach Wave Period Plot\" font \"Arial-bold,11\" \n" + xlabel_string + ylabel_string + ylabel_data[4];
 				break;
 			case 8:
-				label_string = title_string + xlabel_string + ylabel_string + ylabel_data[5];
+				label_string =  "set title \"Chicago Beach Battery Life Plot\" font \"Arial-bold,11\" \n" + xlabel_string + ylabel_string + ylabel_data[5];
 				break;
 		}
 

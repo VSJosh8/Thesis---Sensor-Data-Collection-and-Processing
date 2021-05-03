@@ -141,12 +141,6 @@ protected:
 		int item_pos = getListSize() - 1;
 		for (; item_pos >= 0; item_pos--)
 		{
-			// test/debug
-			//string curr_str, in_str;
-			//in_str = in_sns_dataEntry.dateNtime.convert2string(false);
-			//curr_str = itm_ptr->dateNtime.convert2string(false);
-			//cout << "Pos " << item_pos << " item: " << curr_str << "; (Input item " << in_str << ")";
-			//
 			// compare current item to in_entry			
 			if (in_sns_dataEntry.dateNtime >= (itm_ptr->dateNtime))
 			{
@@ -386,7 +380,6 @@ public:
 		return result;
 	}
 };
-
 
 // A sequence of CS_SensorDataList: one for each sensor_node in the network
 // based on a dynamically allocated array: full random access
@@ -659,6 +652,7 @@ public:
 	}
 	string setPlotSettings()
 	{
+		//string key = "unset key\n";
 		string key = "set key outside\n";
 		string xdata = "set xdata time\n";
 		string timefmt = "set timefmt \"%Y-%m-%d %H:%M:%S\"\n";
@@ -711,7 +705,7 @@ public:
 	string plotNetworkString(int date_info, int data_plot) // Add arguments for setting what plot
 	{							// Specialization ??
 		//Gnuplot gp;
-		string plot = "plot '-' using " + to_string(date_info) + ":" + to_string(data_plot) + " with linespoints";
+		string plot = "plot '-' using " + to_string(date_info) + ":" + to_string(data_plot) + " with linespoints"; // w l or with linespoints for plot
 		string plot2 = "'-' using " + to_string(date_info) + ":" + to_string(data_plot) + " with linespoints";
 		string sensor_name = " title \"Sensor ";
 		string plotstring;

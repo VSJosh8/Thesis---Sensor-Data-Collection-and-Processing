@@ -83,7 +83,6 @@ protected:
 		return out;
 	}
 	// Makes sure that months have correct number of dates
-	// Leap year?
 	bool checkDayAndMonth(unsigned char in_month, unsigned char in_day, unsigned short int in_year)const
 	{
 		bool result = false;
@@ -897,7 +896,7 @@ public:
 						in_day = 1;
 						if ((++in_month) > 12)
 						{
-							// will hiy the year limit : reset to Jan and update year
+							// will hit the year limit : reset to Jan and update year
 							in_month = 1;
 							in_year++;
 						}
@@ -1209,9 +1208,6 @@ protected:
 	inline bool chekVarnumInBounds(int varnum) const
 	{ 
 		return ((varnum >= 0 && varnum < max_variables) ? true : false);
-		//if (varnum >= 0 && varnum < MAX_VARIABLES)
-		//	return true;
-		//return false;		
 	}
 public:
 	basicSensorMultipleScalarReading() { memIsAllocated = false;  max_variables = 0;  blankInitialization(); }
@@ -1359,7 +1355,6 @@ public:
 		}
 		return result;
 	}
-	//
 	//
 	void resetAll() { blankInitialization(); }
 	// set content from a string (coming from text file)

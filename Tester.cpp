@@ -1,4 +1,4 @@
-#include "BerkleyLabSensorSpecific.h"
+#include "BerkeleyLabSensorSpecific.h"
 #include "BeachSensorSpecific.h"
 
 
@@ -140,7 +140,6 @@ void test_BKLab_reading_class()
 		cout << "Reading not set" << endl;
 	cout << "Done" << endl;
 
-
 	testBKLReading.setTemp(in_temp);
 	testBKLReading.setHum(in_humid);
 	testBKLReading.setLight(in_light);
@@ -227,8 +226,8 @@ void test_BKLab_dataList()
 	//test_ptr = dataList.begin();
 
 	testLineSegmentArray[max_test_i++] = "2004-02-28 01:03:16.33393 11 1 19.3024 38.4629 45.08 2.68742";
-	testLineSegmentArray[max_test_i++] = "2004-02-28 01:06:46.778088 18 1 19.175 38.8379 45.08 2.69964";
-	testLineSegmentArray[max_test_i++] = "2004-02-28 01:09:22.323858 23 1 19.1652 38.872 45.08 2.68742";
+	testLineSegmentArray[max_test_i++] = "2004-02-28 01:09:22.323858 18 1 19.175 38.8379 45.08 2.69964";
+	testLineSegmentArray[max_test_i++] = "2004-02-28 01:06:46.778088 23 1 19.1652 38.872 45.08 2.68742";
 	testLineSegmentArray[max_test_i++] = "2004-02-28 01:08:45.992524 22 1 19.1456 38.9401 45.08 2.68742";	
 	testLineSegmentArray[max_test_i++] = "2004-02-28 00:59:16.02785 3 1 19.9884 37.0933 45.08 2.69964";
 	testLineSegmentArray[max_test_i++] = "2004-02-28 01:11:46.941288 28 1 19.1456 38.9401 45.08 2.69964";
@@ -291,17 +290,12 @@ void test_BKLabNetwork()
 	BKLabSensorDataEntry in_sns_dataEntry;
 	string testLineSegment = "2004-02-28 00:59:16.02785 3 1 19.9884 37.0933 45.08 2.69964";
 	in_sns_dataEntry.setFromString(testLineSegment);
-	
-	test_network.printNetworkInfoToScreen();	
-	
 	test_network.addDataToNetwork(in_sns_dataEntry);
-	test_network.printNetworkInfoToScreen();
-	cout << "Done" << endl;
 
 	testLineSegment = "2004-02-28 01:06:46.778088 18 2 19.175 38.8379 45.08 2.69964";
 	in_sns_dataEntry.setFromString(testLineSegment);
 	test_network.addDataToNetwork(in_sns_dataEntry);
-	test_network.printNetworkInfoToScreen();
+
 
 	testLineSegment = "2004-02-28 01:09:46.109598 24 10 19.1652 38.8039 45.08 2.68742";
 	in_sns_dataEntry.setFromString(testLineSegment);
@@ -312,7 +306,7 @@ void test_BKLabNetwork()
 	testLineSegment = "2004-02-28 01:13:46.20 30 5 19.1358 38.9061 45.08 2.68742";
 	in_sns_dataEntry.setFromString(testLineSegment);
 	test_network.addDataToNetwork(in_sns_dataEntry);
-	test_network.printNetworkInfoToScreen();
+
 
 	testLineSegment = "2004-02-28 01:12:46.251377 30 1 19.1358 38.9061 45.08 2.68742";
 	in_sns_dataEntry.setFromString(testLineSegment);
@@ -341,7 +335,7 @@ void testInputFromFile(CS_SensorNetworkData<BKLabSensorDataEntry>& test_network)
 	ifstream ifs;
 	string basedir = "C:\\Users\\Vincent Joshua\\Documents\\AAAAA\\University\\Project\\Data\\";
 	
-	string filename = "sampled_out.txt";
+	string filename = "partial_data.txt";
 	
 	string fullFilename = basedir;
 	fullFilename += filename;
@@ -523,6 +517,35 @@ void testBeachInputFromFile(CS_SensorNetworkData<BeachSensorDataEntry>& test_net
 
 	cout << endl << "Done." << endl;
 }
+void testBeachOutputToFile(CS_SensorNetworkData<BeachSensorDataEntry>& test_network, bool remove = false)
+{
+	ofstream ofs;
+	string basedir = "C:\\Users\\Vincent Joshua\\Documents\\AAAAA\\University\\Project\\Data\\";
+	string filename = "beach_data_out.txt";
+
+	string fullFilename = basedir;
+	fullFilename += filename;
+
+	ofs.open(fullFilename);
+	if (ofs.is_open())
+	{
+		// addfirst line if any (not needed here)
+		if (test_network.storeNetworkDataToFile(ofs, remove))
+		{
+			cout << endl << "Data Stored." << endl;
+			if (remove)
+			{
+				cout << endl << "Summary:" << endl;
+				test_network.printNetworkInfoToScreen();
+			}			
+		}
+		else
+			cout << "Storing to file failed" << endl;
+	}
+	ofs.close();
+
+	cout << endl << "Done." << endl;
+}
 void testBeachPlotting(CS_SensorNetworkData<BeachSensorDataEntry>& test_network)
 {
 	BeachPlot plot_settings;
@@ -543,7 +566,9 @@ void testBeachInputOutputFromFile()
 	CS_SensorNetworkData<BeachSensorDataEntry> test_network;
 	
 	testBeachInputFromFile(test_network);
-	testBeachPlotting(test_network);
+	testBeachOutputToFile(test_network);
+	//testBeachPlotting(test_network);
+	//testSample(test_network);
 }
 void test_intervals()
 {
@@ -610,10 +635,14 @@ void testSample(CS_SensorNetworkData<BKLabSensorDataEntry>& test_network)
 	float reading,measurement,average;
 	vector<vector<float>> temp_array;
 	vector<float>sampled_array;
-	bool valid_time;
-	int place_holder;
 	int counter;
 	int list_pos = 0;
+
+		test_network.getDataFromNetwork(1,1,temp_data);
+	network_data = temp_data;
+	cout << network_data.reading.convert2string(false) << endl;
+	cout << network_data.reading.getMaxVariables() << endl;
+	cout << network_data.dateNtime.convert2string(false) << endl;
 
 	ofs.open(fullFilename);
 
@@ -632,7 +661,7 @@ void testSample(CS_SensorNetworkData<BKLabSensorDataEntry>& test_network)
 		{		
 			getSamples:
 
-			for (;list_pos<test_network.returnDataListSize(1);)
+			for (;list_pos<test_network.returnDataListSize(node_ID);)
 			{
 				test_network.getDataFromNetwork(node_ID,list_pos,temp_data);
 				network_data = temp_data;
@@ -712,7 +741,126 @@ void testSample(CS_SensorNetworkData<BKLabSensorDataEntry>& test_network)
 	}
 	ofs.close();
 
+	cout << endl;
+	cout << "DONE" << endl;
+}
 
+void testBeachSample(CS_SensorNetworkData<BeachSensorDataEntry>& test_network)
+{
+	string to_print;
+	BeachInterval testInterval;
+	BeachDateAndTime test_start, test_stop;
+
+	//
+	ofstream ofs;
+	string basedir = "C:\\Users\\Vincent Joshua\\Documents\\AAAAA\\University\\Project\\Data\\";
+	string filename = "beach_sampled_out.txt";
+	string fullFilename = basedir;
+	fullFilename += filename;
+
+
+	BeachSensorDataEntry temp_data, network_data, sampled_data, checker;
+	float reading,measurement,average;
+	vector<vector<float>> temp_array;
+	vector<float>sampled_array;
+	int counter;
+	int list_pos = 0;
+
+	ofs.open(fullFilename);
+
+	for(int node_ID=0;node_ID<test_network.getNetworkSize();node_ID++)
+	{
+		test_start.date.setDate(2014, 5, 28, true);
+		test_start.time.setTime(13, 0, 0, true);
+		test_stop.date.setDate(2014, 5, 28, true);
+		test_stop.time.setTime(18, 0, 0, true);
+
+		testInterval.setStart(test_start,true);
+		testInterval.setStop(test_stop);
+		testInterval.setDuration(6, 0, 0, true); // 1 hour sampling duration
+		
+		if(test_network.returnDataListSize(node_ID) > 0)
+		{		
+			getSamples:
+			for (;list_pos<test_network.returnDataListSize(node_ID);)
+			{
+				test_network.getDataFromNetwork(node_ID,list_pos,temp_data);
+				network_data = temp_data;
+
+				if(network_data.reading.getMaxVariables()==6)
+				{
+					if(network_data.dateNtime >= testInterval.getStart() && network_data.dateNtime <= testInterval.getStop())
+					{
+						vector<float> sub;
+						for(int var_num=0;var_num<temp_data.reading.getMaxVariables();var_num++)
+						{
+							if(network_data.reading.getVal(var_num,reading))
+							{
+								measurement = reading;
+								sub.push_back(measurement);
+							}
+						}
+						temp_array.push_back(sub);
+						sub.clear();
+						list_pos++;
+					}
+					else if (network_data.dateNtime < testInterval.getStart())
+						list_pos++;
+					
+					else
+						goto getAverages;
+				}
+				else
+					list_pos++;
+			}
+
+			getAverages:
+			int var=0;
+			while(var<temp_array[0].size())
+			{
+				average = 0;
+				for(int i=0;i<temp_array.size();i++)
+				{
+					average += temp_array[i][var];
+				}
+				average = average/temp_array.size();
+				sampled_array.push_back(average);
+				//cout << average << endl;
+				var++;
+			}
+			temp_array.clear();
+			
+			counter++;
+			//
+			sampled_data.dateNtime = testInterval.getMiddle();
+			for(int i=0;i<sampled_array.size();i++)
+			{
+				sampled_data.reading.setVal(i,sampled_array[i],true);
+			}
+			sampled_data.checkAndSetNodeID(node_ID);
+			sampled_data.info.setEpoch(counter);
+			ofs << sampled_data.convert2string(false) << endl;
+			//
+			if(network_data.dateNtime > testInterval.getStop())
+			{
+				testInterval.advanceByDuration();
+				sampled_array.clear();
+				goto getSamples;
+			}
+
+			cout << "Sampled node " << node_ID << " entries" << endl;		
+		}
+		else 
+			cout << "Node ID: " << node_ID << " not set" << endl;
+
+		//end: // Reset time intervals
+		list_pos = 0;
+		temp_array.clear();
+		sampled_array.clear();
+		counter = 0; // Resets for next node ID 
+		testInterval.resetAll();	
+	}
+	ofs.close();
 
 	cout << endl;
 	cout << "DONE" << endl;
@@ -723,9 +871,13 @@ void testSampleFromFile()
 	CS_SensorNetworkData<BKLabSensorDataEntry> test_network;
 	testInputFromFile(test_network);
 	testSample(test_network);
-	//testPlotting(test_network);
 }
-
+void testBeachSampleFromFile()
+{
+	CS_SensorNetworkData<BeachSensorDataEntry> test_network;
+	testBeachInputFromFile(test_network);
+	testBeachSample(test_network);
+}
 int main()
 {	
 	//test_date(); // COMPLETE
@@ -737,7 +889,7 @@ int main()
 	//test_BKLab_date_class(); // COMPLETE
 	//test_BKLab_time_class(); // COMPLETE
 	//test_BKLab_Date_and_time_class(); // COMPLETE
-	//test_BKLab_reading_class();
+	//test_BKLab_reading_class(); //COMPLETE
 	//test_BKLab_sensor_data(); // COMPLETE
 	//test_BKLab_dataList(); // COMPLETE
 
@@ -747,7 +899,7 @@ int main()
 	//test_BKLab_dataList();
 	//test_BKLabNetwork();
 
-	//testInputOutputFromFile();
+	testInputOutputFromFile();
 
 	// Beach data ==================================================
 	//test_Beach_date_class();
@@ -758,8 +910,8 @@ int main()
 	//testBeachInputOutputFromFile();
 
 	// Processing data ===========================================
-	testSampleFromFile();
-	//test_intervals();
+	//testSampleFromFile();
+	//testBeachSampleFromFile();
 
  	cout << "TEST COMPLETE" << endl << endl;
 }
